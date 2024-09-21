@@ -60,6 +60,10 @@ public class MainActivity extends AppCompatActivity {
         ServiceAdapter adapter = new ServiceAdapter(serviceList);
         gridView.setAdapter(adapter);
 
+        activity.findViewById(R.id.titleBar).setOnLongClickListener(v -> {
+            activity.startActivity(new Intent(activity, AdminPanel.class));
+            return true;
+        });
 
     }
 
