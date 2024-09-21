@@ -1,22 +1,34 @@
 package bd.com.ashfaq.apps;
 
+import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,14 +52,18 @@ public class MainActivity extends AppCompatActivity {
         addService(2, "icon_ambulance", "Ambulance");
         addService(3, "icon_doctor", "Doctor");
         addService(4, "icon_hospital", "Hospital");
-        addService(5, "icon_fire", "Fire");
+        addService(5, "icon_fire", "Fire Service");
         addService(6, "icon_rab", "RAB");
+        addService(7, "icon_national_emergency", "Call 999");
 
         // Set up the adapter
         ServiceAdapter adapter = new ServiceAdapter(serviceList);
         gridView.setAdapter(adapter);
 
+
     }
+
+
 
     // Method to add service data to the list
     private void addService(@NonNull Integer idX, String iconName, String title) {
@@ -58,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
         serviceList.add(service);
     }
 
-    public class ServiceAdapter extends android.widget.BaseAdapter {
+    public class ServiceAdapter extends BaseAdapter {
         private final ArrayList<Map<String, String>> serviceList;
 
         public ServiceAdapter(ArrayList<Map<String, String>> serviceList) {
@@ -101,8 +117,15 @@ public class MainActivity extends AppCompatActivity {
             icon.setImageResource(iconResId);
 
             convertView.setOnClickListener(v -> {
-                Intent intent = new Intent(activity, NumberListOfService.class);
-                intent.putExtra("id", service.get("id"));
+                Intent intent = null;
+                if(Objects.equals(service.get("id"), "7")) {
+                    intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:999"));
+                }else{
+                    intent = new Intent(activity, NumberListOfService.class);
+                    intent.putExtra("id", service.get("id"));
+                }
+
                 activity.startActivity(intent);
             });
 
