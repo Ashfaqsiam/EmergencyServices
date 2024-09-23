@@ -110,7 +110,7 @@ public class MainActivity extends AppCompatActivity {
 
             convertView.setOnClickListener(v -> {
                 Intent intent = null;
-                if(Objects.equals(service.get("id"), "7")) {
+                if(Objects.equals(service.get("id"), "0")) {
                     intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse("tel:999"));
                 }else{
