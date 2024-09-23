@@ -51,5 +51,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />
+    <ProgressBar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        android:layout_marginTop="32dp"
+        android:id="@+id/progressBar"/>
 
 </LinearLayout>

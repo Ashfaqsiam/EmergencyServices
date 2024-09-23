@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -35,7 +36,7 @@ public class AdminPanel extends AppCompatActivity {
     // Firebase Database references
     private DatabaseReference databaseReference;
     private DatabaseReference counterReference;
-
+    private ProgressBar progressBar;
     private long serviceCounter = 0;
 
     @Override
@@ -53,6 +54,7 @@ public class AdminPanel extends AppCompatActivity {
         editTextOrganizationName = findViewById(R.id.editTextOrganizationName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
         buttonSubmit = findViewById(R.id.buttonSubmit);
+        progressBar = findViewById(R.id.progressBar);
 
         // Set up spinner for service types
         ArrayList<String>  serviceType = new ArrayList<>();
@@ -75,6 +77,7 @@ public class AdminPanel extends AppCompatActivity {
             if(editTextPhoneNumber.length() < 3 || editTextPhoneNumber.length() > 12){
                 Toast.makeText(AdminPanel.this, "Phone number must be 11 digits", Toast.LENGTH_SHORT).show();
             }else{
+                progressBar.setVisibility(View.VISIBLE);
                 submitData();
             }
         });
@@ -120,6 +123,7 @@ public class AdminPanel extends AppCompatActivity {
                                 // Clear the input fields after successful submission
 //                                editTextOrganizationName.setText("");
                                 editTextPhoneNumber.setText("");
+                                progressBar.setVisibility(View.GONE);
                                 Toast.makeText(AdminPanel.this, "Data submitted successfully", Toast.LENGTH_SHORT).show();
                             })
                             .addOnFailureListener(e -> Toast.makeText(AdminPanel.this, "Failed to submit data: " + e.getMessage(), Toast.LENGTH_LONG).show());
