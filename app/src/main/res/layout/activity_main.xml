@@ -62,6 +62,7 @@
         android:numColumns="2"
         android:verticalSpacing="16dp"
         android:horizontalSpacing="16dp"
+        tools:listitem="@layout/item_services"
         android:elevation="4dp"
         android:gravity="center" />
 
