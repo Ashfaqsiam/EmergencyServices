@@ -1,5 +1,7 @@
 package bd.com.ashfaq.apps;
 
+import static bd.com.ashfaq.apps.StaticData.getMyAppServices;
+
 import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
@@ -47,16 +49,7 @@ public class MainActivity extends AppCompatActivity {
         gridView = findViewById(R.id.gridView);
 
         // Initialize the list
-        serviceList = new ArrayList<>();
-
-        // Add icons and titles
-        addService(1,"icon_police", "Police");
-        addService(2, "icon_ambulance", "Ambulance");
-        addService(3, "icon_doctor", "Doctor");
-        addService(4, "icon_hospital", "Hospital");
-        addService(5, "icon_fire", "Fire Service");
-        addService(6, "icon_rab", "RAB");
-        addService(7, "icon_national_emergency", "Call 999");
+        serviceList = getMyAppServices();
 
         // Set up the adapter
         ServiceAdapter adapter = new ServiceAdapter(serviceList);
@@ -71,14 +64,7 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-    // Method to add service data to the list
-    private void addService(@NonNull Integer idX, String iconName, String title) {
-        Map<String, String> service = new HashMap<>();
-        service.put("id", String.valueOf(idX));
-        service.put("icon", iconName);
-        service.put("title", title);
-        serviceList.add(service);
-    }
+
 
     public class ServiceAdapter extends BaseAdapter {
         private final ArrayList<Map<String, String>> serviceList;
@@ -129,7 +115,7 @@ public class MainActivity extends AppCompatActivity {
                     intent.setData(Uri.parse("tel:999"));
                 }else{
                     intent = new Intent(activity, NumberListOfService.class);
-                    intent.putExtra("id", service.get("id"));
+                    intent.putExtra("serviceType", service.get("id"));
                 }
 
                 activity.startActivity(intent);

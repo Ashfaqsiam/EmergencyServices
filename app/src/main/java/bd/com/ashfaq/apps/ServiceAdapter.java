@@ -1,5 +1,8 @@
 package bd.com.ashfaq.apps;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,9 +16,11 @@ import java.util.List;
 public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceViewHolder> {
 
     private List<ServiceModel> serviceList;
+    private Activity activity;
 
-    public ServiceAdapter(List<ServiceModel> serviceList) {
+    public ServiceAdapter(Activity activity, List<ServiceModel> serviceList) {
         this.serviceList = serviceList;
+        this.activity = activity;
     }
 
     @NonNull
@@ -28,17 +33,20 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
     @Override
     public void onBindViewHolder(@NonNull ServiceViewHolder holder, int position) {
         ServiceModel service = serviceList.get(position);
-        holder.textViewServiceType.setText(service.getService_type());
+//        holder.textViewServiceType.setText(service.getService_type());
         holder.textViewDistName.setText(service.getDist_name());
         holder.textViewOrgName.setText(service.getOrganization_name());
         holder.textViewPhoneNumber.setText(service.getPhone_number());
+
 
         // Set click listener for the item
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle the click event here
-                // For example, show a Toast or start a new Activity
+
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:"+service.getPhone_number()));
+                activity.startActivity(intent);
             }
         });
     }
@@ -55,7 +63,7 @@ public class ServiceAdapter extends RecyclerView.Adapter<ServiceAdapter.ServiceV
 
         public ServiceViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewServiceType = itemView.findViewById(R.id.textViewServiceType);
+//            textViewServiceType = itemView.findViewById(R.id.textViewServiceType);
             textViewDistName = itemView.findViewById(R.id.textViewDistName);
             textViewOrgName = itemView.findViewById(R.id.textViewOrgName);
             textViewPhoneNumber = itemView.findViewById(R.id.textViewPhoneNumber);

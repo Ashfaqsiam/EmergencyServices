@@ -1,5 +1,8 @@
 package bd.com.ashfaq.apps;
 
+import static bd.com.ashfaq.apps.StaticData.bangladeshDistricts;
+import static bd.com.ashfaq.apps.StaticData.getMyAppServices;
+
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -19,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -51,25 +55,26 @@ public class AdminPanel extends AppCompatActivity {
         buttonSubmit = findViewById(R.id.buttonSubmit);
 
         // Set up spinner for service types
-        String[] serviceTypes = {"POLICE", "AMBULANCE", "RAB", "HOSPITAL", "DOCTORS", "FIRE_SERVICE"};
-        ArrayAdapter<String> serviceTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, serviceTypes);
+        ArrayList<String>  serviceType = new ArrayList<>();
+        for(Map<String, String> serviceList : getMyAppServices()){
+            if (!serviceList.get("id").equals("0")){
+                serviceType.add(serviceList.get("id"));
+            }
+        }
+        ArrayAdapter serviceTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, serviceType);
         serviceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerServiceType.setAdapter(serviceTypeAdapter);
 
-        // Set up spinner for Bangladesh districts
-        String[] bangladeshDistricts = {
-                "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh",
-                "Comilla", "Narayanganj", "Gazipur", "Jessore", "Cox's Bazar", "Tangail", "Pabna", "Kushtia"
-                // Add more districts as needed
-        };
+        // Set up spinner for Bangladesh
         ArrayAdapter<String> distAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bangladeshDistricts);
         distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerDistName.setAdapter(distAdapter);
 
         // Submit button click listener
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        buttonSubmit.setOnClickListener(v -> {
+            if(editTextPhoneNumber.length() < 3 || editTextPhoneNumber.length() > 12){
+                Toast.makeText(AdminPanel.this, "Phone number must be 11 digits", Toast.LENGTH_SHORT).show();
+            }else{
                 submitData();
             }
         });

@@ -1,9 +1,13 @@
 package bd.com.ashfaq.apps;
 
+import static bd.com.ashfaq.apps.StaticData.bangladeshDistricts;
+
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -28,58 +32,52 @@ public class NumberListOfService extends AppCompatActivity {
     private ServiceAdapter serviceAdapter;
     private List<ServiceModel> serviceList = new ArrayList<>();
 
-    private Spinner spinnerFilterServiceType;
     private Spinner spinnerFilterDistName;
 
     private DatabaseReference databaseReference;
+
+    private ProgressBar progressBar;
+
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_number_list_of_service);
 
+        activity = this;
+
         // Initialize Firebase Database reference
         databaseReference = FirebaseDatabase.getInstance().getReference("services");
 
         // Initialize UI elements
         recyclerViewServices = findViewById(R.id.recyclerViewServices);
+        progressBar = findViewById(R.id.progressBar);
         recyclerViewServices.setLayoutManager(new LinearLayoutManager(this));
 
-        spinnerFilterServiceType = findViewById(R.id.spinnerFilterServiceType);
         spinnerFilterDistName = findViewById(R.id.spinnerFilterDistName);
 
         // Set up adapters for service type and district filters
         setupSpinners();
 
         // Initially load all data
-        loadServices(null, null);
-
-        // Spinner selection listeners for filtering
-        spinnerFilterServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                String selectedServiceType = spinnerFilterServiceType.getSelectedItem().toString();
-                String selectedDistName = spinnerFilterDistName.getSelectedItem().toString();
-                loadServices(selectedServiceType, selectedDistName);
+        String serviceType = "POLICE";
+        Bundle bundle = getIntent().getExtras();
+        if (bundle != null) {
+            if(bundle.containsKey("serviceType")) {
+                serviceType = bundle.getString("serviceType");
             }
+        }
 
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // Optional: Handle when no item is selected
-            }
-        });
+        loadServices(serviceType, null);
+
 
     }
 
     private void setupSpinners() {
-        // Spinner for service types
-        String[] serviceTypes = {"All", "POLICE", "AMBULANCE", "RAB", "HOSPITAL", "DOCTORS", "FIRE_SERVICE"};
-        ArrayAdapter<String> serviceTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, serviceTypes);
-        serviceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerFilterServiceType.setAdapter(serviceTypeAdapter);
 
         // Spinner for districts in Bangladesh
-        String[] bangladeshDistricts = {"All", "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh"};
+
         ArrayAdapter<String> distAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bangladeshDistricts);
         distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerFilterDistName.setAdapter(distAdapter);
@@ -105,8 +103,9 @@ public class NumberListOfService extends AppCompatActivity {
                         serviceList.add(service);
                     }
                 }
-                serviceAdapter = new ServiceAdapter(serviceList);
+                serviceAdapter = new ServiceAdapter(activity, serviceList);
                 recyclerViewServices.setAdapter(serviceAdapter);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
