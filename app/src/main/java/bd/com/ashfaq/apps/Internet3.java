@@ -99,10 +99,10 @@ public class Internet3 extends AsyncTask<Void, Void, JSONObject> {
             if (code != 200 && code != -1) {
 //                alert(activity, code + " ", allLines);
             }
-            if (result.has("error") && activity != null) {
-                CustomTools customTools = new CustomTools(activity);
-                customTools.toast(result.getString("error"));
-            }
+//            if (result.has("error") && activity != null) {
+//                CustomTools customTools = new CustomTools(activity);
+////                customTools.toast(result.getString("error"));
+//            }
 
 
         } catch (Exception e) {
@@ -145,7 +145,7 @@ public class Internet3 extends AsyncTask<Void, Void, JSONObject> {
                     for (Map.Entry<String, String> entry : inputs.entrySet()) {
                         String key = entry.getKey();
                         String value = entry.getValue();
-                        if (!key.equals("") && !value.equals("")) {
+                        if (key != null && value != null && !key.isEmpty() && !value.isEmpty()) {
                             addFormField(key, value, dataOutputStream);
                         }
                     }
@@ -156,7 +156,7 @@ public class Internet3 extends AsyncTask<Void, Void, JSONObject> {
                     for (Map.Entry<String, Bitmap> entry : files.entrySet()) {
                         String key = entry.getKey();
                         Bitmap value = entry.getValue();
-                        if (!key.equals("") && value != null) {
+                        if (key != null && value != null && !key.isEmpty()) {
                             addFilePart(key, value, dataOutputStream);
                         }
                     }
@@ -189,7 +189,7 @@ public class Internet3 extends AsyncTask<Void, Void, JSONObject> {
                 }
             }
         } catch (Exception e) {
-            log(this.url + " - Internet3 error:" + e, true);
+            log(this.url + " - Internet3 error:" + e.getMessage(), true);
         }
         code = -1;
         return new JSONObject();

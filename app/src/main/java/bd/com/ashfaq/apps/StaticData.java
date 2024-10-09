@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class StaticData {
+
+    public static String TAG = "errnos";
     public static String[] bangladeshDistricts = {"All", "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh"};
     public static String[] doctorsSpecialist = {
             "All",

@@ -2,9 +2,13 @@ package bd.com.ashfaq.apps;
 
 import static bd.com.ashfaq.apps.CustomTools.log;
 
-import android.os.Bundle;
 import android.app.Activity;
+import android.content.Context;
+import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -12,8 +16,6 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -62,13 +64,46 @@ public class AdminPanel extends Activity {
             }
         });
 
-        // Set the button click listener
-        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+        //
+        final Integer[] x = {3};
+        ((EditText)findViewById(R.id.et_passcode)).addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View v) {
-                submitData();
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.length() == 12){
+                    TextView tvResultPass = findViewById(R.id.tvResultPass);
+                    if (String.valueOf(s).equalsIgnoreCase("324462324462")){
+                        InputMethodManager inputManager = (InputMethodManager)
+                                getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                        inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(),
+                                InputMethodManager.HIDE_NOT_ALWAYS);
+                        findViewById(R.id.et_passcode).clearFocus();
+                        findViewById(R.id.rlCheckPassCode).setVisibility(View.GONE);
+                        // Set the button click listener
+                        buttonSubmit.setOnClickListener(v -> submitData());
+                    }else{
+                        x[0]--;
+                        tvResultPass.setText(x[0] + " attempt left");
+                        if (x[0] == 0){
+                            finishAffinity();
+                            System.exit(0);
+                        }
+                    }
+                    s.clear();
+                }
             }
         });
+
     }
 
     private void populateServiceTypeSpinner() {
