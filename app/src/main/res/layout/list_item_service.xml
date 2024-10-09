@@ -23,20 +23,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#1DB7D1"
+            android:backgroundTint="#58E7FF"
+            android:backgroundTintMode="add"
+            android:text="Name:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_person_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:textStyle="bold"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -45,19 +53,28 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Organization/Company:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#E21ED2"
+            android:backgroundTint="#2C9BB1"
+            android:backgroundTintMode="add"
+            android:text="Organization/Company:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_organization_name"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -66,38 +83,55 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="City:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#9170D3"
+            android:backgroundTint="#6487E9"
+            android:text="City:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_service_city"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:layout_height="wrap_content" />
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
         android:id="@+id/linearLayout_service_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:background="#786072"
+        android:backgroundTint="#3CFD5F"
+        android:orientation="horizontal">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Address/Area:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#9999DC"
+            android:backgroundTint="#4EF1FB"
+            android:text="Address/Area:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_service_area"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -106,18 +140,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Designation/Specialization:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#39DC49"
+            android:backgroundTint="#68C733"
+            android:text="Designation/Specialization:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_person_specialization"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Person Specialization" />
+            android:layout_weight="1"
+            android:background="#C1C3E7"
+            android:backgroundTint="#51D6E2"
+            android:text="Person Specialization"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textStyle="bold"/>
     </LinearLayout>
 
     <LinearLayout
@@ -126,18 +168,26 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mobile Number:"
             android:layout_marginEnd="8dp"
-            />
+            android:background="#E2A734"
+            android:backgroundTint="#FBED49"
+            android:text="Mobile Number:"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+
         <TextView
             android:id="@+id/tv_phone_number"
             android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:backgroundTint="#FFFFFF"
+            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
             android:textStyle="italic"
-            android:layout_height="wrap_content" />
+            />
     </LinearLayout>
 
     <View

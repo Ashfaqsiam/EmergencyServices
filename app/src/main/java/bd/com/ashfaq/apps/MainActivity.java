@@ -2,33 +2,20 @@ package bd.com.ashfaq.apps;
 
 import static bd.com.ashfaq.apps.StaticData.getMyAppServices;
 
-import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.AttributeSet;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -116,7 +103,9 @@ public class MainActivity extends AppCompatActivity {
                 }else{
                     intent = new Intent(activity, NumberListOfService.class);
                     intent.putExtra("serviceType", service.get("id"));
+                    intent.putExtra("serviceTitle", service.get("title"));
                 }
+
 
                 activity.startActivity(intent);
             });

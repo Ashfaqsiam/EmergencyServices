@@ -3,9 +3,9 @@ package bd.com.ashfaq.apps;
 import static bd.com.ashfaq.apps.CustomTools.alert;
 import static bd.com.ashfaq.apps.CustomTools.log;
 import static bd.com.ashfaq.apps.CustomTools.toast;
+import static bd.com.ashfaq.apps.StaticData.TAG;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,7 +19,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -38,13 +38,13 @@ import java.util.Map;
 import java.util.Objects;
 
 public class NumberListOfService extends AppCompatActivity {
-    private static final String TAG = "NumberListOfService";
     public Activity activity;
 
     private Spinner spinnerCity, spinnerSpecialization; // Using one spinner for both city and specialization
     private EditText etPersonName, etOrganizationName, etServiceArea;
     private RecyclerView recyclerViewResults;
     private TextView tvResults;
+    ProgressBar progressBar;
 
     private String serviceType = "POLICE"; // Default service type
 
@@ -60,6 +60,7 @@ public class NumberListOfService extends AppCompatActivity {
         etPersonName = findViewById(R.id.et_person_name);
         etOrganizationName = findViewById(R.id.et_organization_name);
         etServiceArea = findViewById(R.id.et_service_area);
+        progressBar = findViewById(R.id.progressBar);
         // Initialize the RecyclerView
         recyclerViewResults = findViewById(R.id.recycler_view_results);
         recyclerViewResults.setLayoutManager(new LinearLayoutManager(this));
@@ -69,6 +70,10 @@ public class NumberListOfService extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null && bundle.containsKey("serviceType")) {
             serviceType = bundle.getString("serviceType");
+        }
+        if (bundle != null && bundle.containsKey("serviceTitle")) {
+            String serviceTitle = bundle.getString("serviceTitle");
+            ((TextView)activity.findViewById(R.id.titleBarText)).setText(serviceTitle);
         }
 
         // Load cities and specializations from static data
@@ -106,6 +111,8 @@ public class NumberListOfService extends AppCompatActivity {
                 break;
             // Add other cases as needed based on your services
             default:
+                activity.findViewById(R.id.designationID).setVisibility(View.GONE);
+                etPersonName.setVisibility(View.GONE);
                 specializations = new String[]{}; // If no specific specialization is required
                 break;
         }
@@ -140,11 +147,13 @@ public class NumberListOfService extends AppCompatActivity {
         }
 
         // Call the Internet3 class to handle the network request
+        progressBar.setVisibility(View.VISIBLE);
         new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
             if (code == 200) {
-                log(result);
-                log(formData);
+//                log(result);
+//                log(formData);
                 // Handle the result to update the ListView
+                progressBar.setVisibility(View.GONE);
                 updateListView(result);
             } else {
                 Log.e(TAG, "Failed to fetch data. Error code: " + code);
@@ -186,6 +195,9 @@ public class NumberListOfService extends AppCompatActivity {
             log(e.getMessage());
         }
     }
+
+
+
 
 
 

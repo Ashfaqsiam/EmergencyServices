@@ -66,7 +66,7 @@ import java.util.Random;
 
 
 public class CustomTools {
-    public static String DEBUG_URL = "http://172.122.210.46", SERVER_URL;
+    public static String DEBUG_URL = "http://192.168.137.1", SERVER_URL;
     public static String TAG = "errnos";
     protected Activity activity;
 
