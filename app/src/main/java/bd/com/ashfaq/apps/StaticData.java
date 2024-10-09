@@ -8,6 +8,74 @@ import java.util.Map;
 
 public class StaticData {
     public static String[] bangladeshDistricts = {"All", "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh"};
+    public static String[] doctorsSpecialist = {
+            "All",
+            "Cardiologist",
+            "Neurologist",
+            "Orthopedic Surgeon",
+            "Pediatrician",
+            "General Surgeon",
+            "Dermatologist",
+            "ENT Specialist",
+            "Gynecologist",
+            "Urologist",
+            "Psychiatrist",
+            "Ophthalmologist",
+            "Oncologist",
+            "Nephrologist",
+            "Endocrinologist",
+            "Gastroenterologist",
+            "Pulmonologist",
+            "Hematologist",
+            "Plastic Surgeon",
+            "Radiologist",
+            "Anesthesiologist",
+            "Allergist",
+            "Pathologist"
+    };
+
+    public static String[] policeDesignations = {
+            "All",
+            "Inspector General of Police (IGP)",
+            "Additional Inspector General of Police",
+            "Deputy Inspector General of Police (DIG)",
+            "Assistant Inspector General of Police",
+            "Superintendent of Police (SP)",
+            "Additional Superintendent of Police",
+            "Assistant Superintendent of Police (ASP)",
+            "Inspector",
+            "Sub-Inspector (SI)",
+            "Assistant Sub-Inspector (ASI)",
+            "Constable"
+    };
+
+    public static String[] rabDesignations = {
+            "All",
+            "Director General",
+            "Additional Director General",
+            "Director",
+            "Deputy Director",
+            "Assistant Director",
+            "Senior Assistant Director",
+            "Superintendent of Police (RAB)",
+            "Sub-Inspector (RAB)",
+            "Assistant Sub-Inspector (RAB)",
+            "Constable (RAB)"
+    };
+
+    public static String[] fireServiceDesignations = {
+            "All",
+            "Director General",
+            "Deputy Director",
+            "Assistant Director",
+            "Station Officer",
+            "Senior Station Officer",
+            "Firefighter",
+            "Leading Firefighter",
+            "Watchroom Operator",
+            "Driver"
+    };
+
 
 
     public static ArrayList<Map<String, String>> getMyAppServices() {

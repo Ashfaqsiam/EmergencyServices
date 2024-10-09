@@ -1,140 +1,196 @@
 package bd.com.ashfaq.apps;
 
-import static bd.com.ashfaq.apps.StaticData.bangladeshDistricts;
-import static bd.com.ashfaq.apps.StaticData.getMyAppServices;
+import static bd.com.ashfaq.apps.CustomTools.log;
 
 import android.os.Bundle;
+import android.app.Activity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
-import com.google.firebase.database.Transaction;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class AdminPanel extends AppCompatActivity {
-    private Spinner spinnerServiceType;
-    private Spinner spinnerDistName;
-    private EditText editTextOrganizationName, editTextPhoneNumber;
+public class AdminPanel extends Activity {
+
+    private TextView tvPersonSpecialization;
+    private Spinner spinnerServiceType, spinnerDistName, spinnerPersonSpecialization;
+    private EditText editTextOrganizationName, editTextPhoneNumber, editTextPersonName, editTextServiceArea;
     private Button buttonSubmit;
-
-    // Firebase Database references
-    private DatabaseReference databaseReference;
-    private DatabaseReference counterReference;
     private ProgressBar progressBar;
-    private long serviceCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_panel);
 
-        // Initialize Firebase Database
-        databaseReference = FirebaseDatabase.getInstance().getReference("services");
-        counterReference = FirebaseDatabase.getInstance().getReference("services_counter"); // Initialize the counter reference
-
-        // Initialize UI elements
+        // Initialize UI components
         spinnerServiceType = findViewById(R.id.spinnerServiceType);
         spinnerDistName = findViewById(R.id.spinnerDistName);
+        spinnerPersonSpecialization = findViewById(R.id.spinnerPersonSpecialization); // Spinner for specialization
+        tvPersonSpecialization = findViewById(R.id.tvPersonSpecialization); // Spinner for specialization
         editTextOrganizationName = findViewById(R.id.editTextOrganizationName);
         editTextPhoneNumber = findViewById(R.id.editTextPhoneNumber);
+        editTextPersonName = findViewById(R.id.editTextPersonName);
+        editTextServiceArea = findViewById(R.id.editTextServiceArea);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         progressBar = findViewById(R.id.progressBar);
 
-        // Set up spinner for service types
-        ArrayList<String>  serviceType = new ArrayList<>();
-        for(Map<String, String> serviceList : getMyAppServices()){
-            if (!serviceList.get("id").equals("0")){
-                serviceType.add(serviceList.get("id"));
+        // Populate the spinners with data
+        populateServiceTypeSpinner();
+        populateDistrictSpinner();
+
+        // Set service type change listener
+        spinnerServiceType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                updateSpecializationSpinner();
             }
-        }
-        ArrayAdapter serviceTypeAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, serviceType);
-        serviceTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerServiceType.setAdapter(serviceTypeAdapter);
 
-        // Set up spinner for Bangladesh
-        ArrayAdapter<String> distAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bangladeshDistricts);
-        distAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerDistName.setAdapter(distAdapter);
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // Do nothing
+            }
+        });
 
-        // Submit button click listener
-        buttonSubmit.setOnClickListener(v -> {
-            if(editTextPhoneNumber.length() < 3 || editTextPhoneNumber.length() > 12){
-                Toast.makeText(AdminPanel.this, "Phone number must be 11 digits", Toast.LENGTH_SHORT).show();
-            }else{
-                progressBar.setVisibility(View.VISIBLE);
+        // Set the button click listener
+        buttonSubmit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
                 submitData();
             }
         });
     }
 
+    private void populateServiceTypeSpinner() {
+        // Retrieve the service types from StaticData
+        ArrayList<Map<String, String>> services = StaticData.getMyAppServices();
+        ArrayList<String> serviceTitles = new ArrayList<>();
+
+        // Extract only the titles for the spinner
+        for (Map<String, String> service : services) {
+            if (!Objects.equals(service.get("id"), "0")) {
+                serviceTitles.add(service.get("title"));
+            }
+        }
+
+        // Create an ArrayAdapter for the service spinner
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, serviceTitles);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerServiceType.setAdapter(adapter);
+    }
+
+    private void populateDistrictSpinner() {
+        // Retrieve the district names from StaticData
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, StaticData.bangladeshDistricts);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDistName.setAdapter(adapter);
+    }
+
+    private void updateSpecializationSpinner() {
+        String selectedService = spinnerServiceType.getSelectedItem().toString();
+        String[] specializationOptions;
+
+        // Check which service type is selected and populate specialization accordingly
+        switch (selectedService) {
+            case "Doctor":
+                specializationOptions = StaticData.doctorsSpecialist;
+                break;
+            case "Police":
+                specializationOptions = StaticData.policeDesignations;
+                break;
+            case "RAB":
+                specializationOptions = StaticData.rabDesignations;
+                break;
+            case "Fire Service":
+                specializationOptions = StaticData.fireServiceDesignations;
+                break;
+            default:
+                specializationOptions = new String[]{};
+                break;
+        }
+
+        // If there are no specializations for the selected service type, hide the spinner
+        if (specializationOptions.length == 0) {
+            spinnerPersonSpecialization.setVisibility(View.GONE);
+            tvPersonSpecialization.setVisibility(View.GONE);
+            editTextPersonName.setVisibility(View.GONE);
+        } else {
+            spinnerPersonSpecialization.setVisibility(View.VISIBLE);
+            tvPersonSpecialization.setVisibility(View.VISIBLE);
+            editTextPersonName.setVisibility(View.VISIBLE);
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, specializationOptions);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinnerPersonSpecialization.setAdapter(adapter);
+        }
+    }
+
     private void submitData() {
-        // Initialize counterReference to keep track of the service counter
-        counterReference.runTransaction(new Transaction.Handler() {
-            @NonNull
-            @Override
-            public Transaction.Result doTransaction(@NonNull MutableData currentData) {
-                Long currentCounter = currentData.getValue(Long.class);
-                if (currentCounter == null) {
-                    currentCounter = 0L;  // Initialize the counter if it doesn't exist
-                }
+        // Show the progress bar
+        progressBar.setVisibility(View.VISIBLE);
 
-                // Increment the counter
-                serviceCounter = currentCounter + 1;
-                currentData.setValue(serviceCounter);  // Update the counter in Firebase
-                return Transaction.success(currentData);
+        // Prepare data to send
+        ArrayList<Map<String, String>> services = StaticData.getMyAppServices();
+        String serviceType = null;
+        // Extract only the titles for the spinner
+        for (Map<String, String> service : services) {
+            if (Objects.equals(service.get("title"), spinnerServiceType.getSelectedItem().toString())) {
+                serviceType = service.get("id");
+                break;
             }
+        }
 
-            @Override
-            public void onComplete(@Nullable DatabaseError error, boolean committed, @Nullable DataSnapshot currentData) {
-                if (committed) {
-                    // Get user input
-                    String serviceType = spinnerServiceType.getSelectedItem().toString();
-                    String distName = spinnerDistName.getSelectedItem().toString();
-                    String organizationName = editTextOrganizationName.getText().toString();
-                    String phoneNumber = editTextPhoneNumber.getText().toString();
+        String districtName = spinnerDistName.getSelectedItem().toString();
+        String organizationName = editTextOrganizationName.getText().toString();
+        String phoneNumber = editTextPhoneNumber.getText().toString();
+        String personName = editTextPersonName.getText().toString();
+        String serviceArea = editTextServiceArea.getText().toString();
+        String personSpecialization = "";
 
-                    // Create a data map
-                    Map<String, String> serviceData = new HashMap<>();
-                    serviceData.put("service_type", serviceType);
-                    serviceData.put("organization_name", organizationName);
-                    serviceData.put("dist_name", distName);
-                    serviceData.put("phone_number", phoneNumber);
-                    serviceData.put("id", String.valueOf(serviceCounter));  // Use the counter as the ID
+        // If the specialization spinner is visible, get the selected specialization
+        if (spinnerPersonSpecialization.getVisibility() == View.VISIBLE) {
+            personSpecialization = spinnerPersonSpecialization.getSelectedItem().toString();
+        }
 
-                    // Push data to Firebase Realtime Database using the counter as the unique ID
-                    databaseReference.child(String.valueOf(serviceCounter)).setValue(serviceData)
-                            .addOnSuccessListener(aVoid -> {
-                                // Clear the input fields after successful submission
-//                                editTextOrganizationName.setText("");
-                                editTextPhoneNumber.setText("");
-                                progressBar.setVisibility(View.GONE);
-                                Toast.makeText(AdminPanel.this, "Data submitted successfully", Toast.LENGTH_SHORT).show();
-                            })
-                            .addOnFailureListener(e -> Toast.makeText(AdminPanel.this, "Failed to submit data: " + e.getMessage(), Toast.LENGTH_LONG).show());
-                } else {
-                    if (error != null) {
-                        Toast.makeText(AdminPanel.this, "Transaction failed: " + error.getMessage(), Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(AdminPanel.this, "Transaction was not committed.", Toast.LENGTH_LONG).show();
-                    }
-                }
+        // Validate required fields
+        if (phoneNumber.isEmpty()) {
+            CustomTools.toast(this, "Please fill in all required fields.");
+            progressBar.setVisibility(View.GONE);
+            return;
+        }
+
+        // Create a map to hold the form data
+        Map<String, String> formData = new HashMap<>();
+        formData.put("service_type", serviceType);
+        formData.put("service_city", districtName);
+        formData.put("organization_name", organizationName);
+        formData.put("phone_number", phoneNumber);
+        formData.put("person_name", personName);
+        formData.put("service_area", serviceArea);
+        formData.put("person_specialization", personSpecialization); // Add specialization to form data
+        formData.put("add_es", "1");
+
+        // Call the Internet3 class to handle the network request
+        new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
+            // Hide the progress bar
+            progressBar.setVisibility(View.GONE);
+
+            // Handle the result (success or error)
+            if (code == 200) {
+                CustomTools.toast(AdminPanel.this, "Data submitted successfully!");
+                log(result);
+            } else {
+                CustomTools.toast(AdminPanel.this, "Failed to submit data.");
             }
-        });
+        }).connect();
     }
 }

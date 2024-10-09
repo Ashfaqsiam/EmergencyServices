@@ -18,17 +18,12 @@
         android:layout_height="wrap_content"
         android:spinnerMode="dropdown" />
 
-    <!-- Spinner for district -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Select District:" />
-
-    <Spinner
-        android:id="@+id/spinnerDistName"
+    <!-- EditText for person name -->
+    <EditText
+        android:id="@+id/editTextPersonName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:spinnerMode="dropdown" />
+        android:hint="Person Name" />
 
     <!-- EditText for organization name -->
     <EditText
@@ -36,6 +31,40 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Organization Name" />
+
+    <!-- EditText for service city -->
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Service City:" />
+
+    <Spinner
+        android:id="@+id/spinnerDistName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:spinnerMode="dropdown" />
+
+    <!-- EditText for service area -->
+    <EditText
+        android:id="@+id/editTextServiceArea"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Service Area/Address" />
+
+    <!-- EditText for person specialization -->
+    <TextView
+        android:id="@+id/tvPersonSpecialization"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Person Specialization"/>
+
+    <Spinner
+        android:id="@+id/spinnerPersonSpecialization"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" /> <!-- Initially hidden -->
+
 
     <!-- EditText for phone number -->
     <EditText
@@ -51,12 +80,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Submit" />
+
+    <!-- Progress bar for loading state -->
     <ProgressBar
+        android:id="@+id/progressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:indeterminate="true"
         android:visibility="gone"
-        android:layout_marginTop="32dp"
-        android:id="@+id/progressBar"/>
+        android:layout_marginTop="32dp" />
 
 </LinearLayout>
