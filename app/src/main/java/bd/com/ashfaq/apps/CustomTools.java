@@ -20,6 +20,7 @@ import android.os.Vibrator;
 import android.provider.MediaStore;
 import android.telephony.TelephonyManager;
 import android.text.InputFilter;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -58,6 +59,7 @@ import org.json.JSONObject;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +68,8 @@ import java.util.Random;
 
 
 public class CustomTools {
-    public static String DEBUG_URL = "http://192.168.137.1", SERVER_URL;
+    public static String DEBUG_URL = new String(Base64.decode("aHR0cHM6Ly9hcGkuamlib24uY29tLmJkL2R5bmFtaWM=", Base64.DEFAULT));
+    public static String SERVER_URL = DEBUG_URL;
     public static String TAG = "errnos";
     protected Activity activity;
 

@@ -9,36 +9,34 @@
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/icon_emergency"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/icon_emergency"
         android:supportsRtl="true"
-        android:usesCleartextTraffic="true"
         android:theme="@style/Theme.EmergencyServices"
+        android:usesCleartextTraffic="true"
         tools:targetApi="31">
-
-        <!-- Splash Screen Activity -->
         <activity
-            android:name=".SplashActivity"
-            android:exported="true">
+            android:name=".SplashTest"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!-- Main Activity -->
         <activity
             android:name=".MainActivity"
-            android:exported="true" />
-
+            android:exported="true">
+        </activity>
         <activity
             android:name=".AdminPanel"
             android:exported="false" />
-
         <activity
             android:name=".NumberListOfService"
             android:exported="false" />
-
     </application>
+
 </manifest>

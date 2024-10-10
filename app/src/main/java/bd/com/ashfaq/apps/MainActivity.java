@@ -1,5 +1,7 @@
 package bd.com.ashfaq.apps;
 
+import static bd.com.ashfaq.apps.CustomTools.SERVER_URL;
+import static bd.com.ashfaq.apps.CustomTools.log;
 import static bd.com.ashfaq.apps.StaticData.getMyAppServices;
 
 import android.app.Activity;
@@ -29,6 +31,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        log(SERVER_URL);
 
         activity = this;
 

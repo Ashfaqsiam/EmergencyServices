@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     tools:ignore="all"
+    android:background="@color/white"
     android:orientation="vertical">
     <LinearLayout
         android:id="@+id/titleBar"
