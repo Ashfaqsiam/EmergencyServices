@@ -19,6 +19,7 @@
         <activity
             android:name=".SplashTest"
             android:exported="true"
+            android:theme="@style/SplashScree"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -27,16 +28,10 @@
             </intent-filter>
         </activity>
         <!-- Main Activity -->
-        <activity
-            android:name=".MainActivity"
-            android:exported="true">
+        <activity android:name=".MainActivity">
         </activity>
-        <activity
-            android:name=".AdminPanel"
-            android:exported="false" />
-        <activity
-            android:name=".NumberListOfService"
-            android:exported="false" />
+        <activity android:name=".AdminPanel" />
+        <activity android:name=".NumberListOfService" />
     </application>
 
 </manifest>
