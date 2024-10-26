@@ -14,7 +14,6 @@
         <!-- Customize your theme here. -->
         <item name="android:keepScreenOn">true</item>
     </style>
-
     <style name="SplashScree" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowBackground">@drawable/splash_screen</item>
     </style>

@@ -153,6 +153,8 @@
                 android:id="@+id/buttonSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#ED60DC41"
+                android:backgroundTint="#5BBD41"
                 android:text="Submit"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 

@@ -24,6 +24,6 @@ public class SplashTest extends AppCompatActivity {
             public void run() {
                 activity.startActivity(new Intent(activity, MainActivity.class));
             }
-        }, 250);
+        }, 300);
     }
 }

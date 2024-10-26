@@ -43,7 +43,7 @@
             android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+            android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -62,7 +62,7 @@
             android:backgroundTint="#2C9BB1"
             android:backgroundTintMode="add"
             android:text="Organization/Company:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_organization_name"
@@ -73,7 +73,7 @@
             android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/black"
             android:textStyle="bold"/>
     </LinearLayout>
 
@@ -91,7 +91,7 @@
             android:background="#9170D3"
             android:backgroundTint="#6487E9"
             android:text="City:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_service_city"
@@ -102,7 +102,7 @@
             android:ellipsize="end"
             android:singleLine="true"
             android:backgroundTint="#FFFFFF"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/black"
             android:textStyle="bold" />
     </LinearLayout>
 
@@ -110,8 +110,6 @@
         android:id="@+id/linearLayout_service_area"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#786072"
-        android:backgroundTint="#3CFD5F"
         android:orientation="horizontal">
 
         <TextView
@@ -121,7 +119,7 @@
             android:background="#9999DC"
             android:backgroundTint="#4EF1FB"
             android:text="Address/Area:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_service_area"
@@ -130,11 +128,13 @@
             android:layout_weight="1"
             android:background="#FFFFFF"
             android:backgroundTint="#FFFFFF"
-            android:ellipsize="end"
-            android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-            android:textStyle="bold" />
+            android:maxLines="10"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+
+            />
     </LinearLayout>
+
 
     <LinearLayout
         android:id="@+id/linearLayout_person_specialization"
@@ -149,7 +149,8 @@
             android:layout_marginEnd="8dp"
             android:background="#39DC49"
             android:backgroundTint="#68C733"
-            android:text="Designation/Specialization:" />
+            android:text="Designation/Specialization:"
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_person_specialization"
@@ -158,11 +159,9 @@
             android:layout_weight="1"
             android:background="#C1C3E7"
             android:backgroundTint="#51D6E2"
-            android:ellipsize="end"
             android:text="Person Specialization"
-            android:singleLine="true"
             android:textColor="@color/black"
-            android:textStyle="bold"/>
+            android:textStyle="bold" />
     </LinearLayout>
 
     <LinearLayout
@@ -179,7 +178,7 @@
             android:background="#E2A734"
             android:backgroundTint="#FBED49"
             android:text="Mobile Number:"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
+            android:textColor="@color/black" />
 
         <TextView
             android:id="@+id/tv_phone_number"
@@ -190,7 +189,7 @@
             android:backgroundTint="#FFFFFF"
             android:ellipsize="end"
             android:singleLine="true"
-            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:textColor="@color/black"
             android:textStyle="italic"
             />
     </LinearLayout>

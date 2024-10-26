@@ -9,7 +9,7 @@ import java.util.Map;
 public class StaticData {
 
     public static String TAG = "errnos";
-    public static String[] bangladeshDistricts = {"All", "Dhaka", "Chattogram", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh"};
+    public static String[] bangladeshDistricts = {"All", "Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh", "Comilla", "Chattogram"};
     public static String[] doctorsSpecialist = {
             "All",
             "Cardiologist",
@@ -33,11 +33,13 @@ public class StaticData {
             "Radiologist",
             "Anesthesiologist",
             "Allergist",
+            "Medicine specialist",
             "Pathologist"
     };
 
     public static String[] policeDesignations = {
             "All",
+            "police commissioner",
             "Inspector General of Police (IGP)",
             "Additional Inspector General of Police",
             "Deputy Inspector General of Police (DIG)",
