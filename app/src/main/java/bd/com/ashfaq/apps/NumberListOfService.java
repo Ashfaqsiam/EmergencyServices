@@ -2,6 +2,7 @@ package bd.com.ashfaq.apps;
 
 import static bd.com.ashfaq.apps.CustomTools.alert;
 import static bd.com.ashfaq.apps.CustomTools.log;
+import static bd.com.ashfaq.apps.CustomTools.setClipboard;
 import static bd.com.ashfaq.apps.CustomTools.toast;
 import static bd.com.ashfaq.apps.StaticData.TAG;
 
@@ -329,7 +330,8 @@ public class NumberListOfService extends AppCompatActivity {
             });
 
             holder.itemView.setOnLongClickListener(v -> {
-                toast(activity, "Deleted");
+                setClipboard(activity, String.valueOf(serviceData.get("phone_number")));
+                toast(activity, "Number Copied");
                 return true;
             });
 

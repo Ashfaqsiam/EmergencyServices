@@ -23,6 +23,8 @@ public class SplashTest extends AppCompatActivity {
             @Override
             public void run() {
                 activity.startActivity(new Intent(activity, MainActivity.class));
+                activity.finishAffinity();
+                System.exit((int) 0);
             }
         }, 300);
     }
