@@ -92,6 +92,7 @@ public class StaticData {
         serviceList.add(addService("FIRE_SERVICE", "icon_fire", "Fire Service"));
         serviceList.add(addService("RAB", "icon_rab", "RAB"));
         serviceList.add(addService("0", "icon_national_emergency", "Call 999"));
+        serviceList.add(addService("2", "icon_national_emergency", "Request Listing"));
         return serviceList;
     }
 

@@ -104,6 +104,8 @@ public class MainActivity extends AppCompatActivity {
                 if(Objects.equals(service.get("id"), "0")) {
                     intent = new Intent(Intent.ACTION_DIAL);
                     intent.setData(Uri.parse("tel:999"));
+                } else if (Objects.equals(service.get("id"), "2")) {
+                    intent = new Intent(activity, RequestForListing.class);
                 }else{
                     intent = new Intent(activity, NumberListOfService.class);
                     intent.putExtra("serviceType", service.get("id"));

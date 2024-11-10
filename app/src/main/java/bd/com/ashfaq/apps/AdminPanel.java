@@ -13,9 +13,15 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +35,10 @@ public class AdminPanel extends Activity {
     private EditText editTextOrganizationName, editTextPhoneNumber, editTextPersonName, editTextServiceArea;
     private Button buttonSubmit;
     private ProgressBar progressBar;
+
+    private ListView listViewUnverified;
+    private ArrayList<String> unverifiedDataList = new ArrayList<>();
+    private ArrayAdapter<String> unverifiedDataAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,6 +56,14 @@ public class AdminPanel extends Activity {
         editTextServiceArea = findViewById(R.id.editTextServiceArea);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         progressBar = findViewById(R.id.progressBar);
+        listViewUnverified = findViewById(R.id.listViewUnverified);
+
+        // Initialize ArrayAdapter to populate the ListView
+        unverifiedDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, unverifiedDataList);
+        listViewUnverified.setAdapter(unverifiedDataAdapter);
+
+        // Fetch unverified data from server
+        fetchUnverifiedData();
 
         // Populate the spinners with data
         populateServiceTypeSpinner();
@@ -64,7 +82,7 @@ public class AdminPanel extends Activity {
             }
         });
 
-        //
+        // Handle passcode logic
         final Integer[] x = {3};
         ((EditText)findViewById(R.id.et_passcode)).addTextChangedListener(new TextWatcher() {
             @Override
@@ -104,6 +122,69 @@ public class AdminPanel extends Activity {
             }
         });
 
+    }
+
+    private void fetchUnverifiedData() {
+        progressBar.setVisibility(View.VISIBLE);
+
+        // Prepare data for the server request
+        Map<String, String> formData = new HashMap<>();
+        formData.put("get_unverified", "1");
+
+        // Make request to the server
+        new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
+            progressBar.setVisibility(View.GONE);
+
+            if (code == 200) {
+                // Parse the result and display "UNVERIFIED" entries
+                displayUnverifiedData(result);
+            } else {
+                CustomTools.toast(AdminPanel.this, "Failed to fetch data.");
+            }
+        }).connect();
+    }
+
+
+    private void displayUnverifiedData(String result) {
+        try {
+            JSONArray jsonArray = new JSONArray(result);
+            unverifiedDataList.clear();  // Clear existing data
+
+            // Parse and add data to the list
+            for (int i = 0; i < jsonArray.length(); i++) {
+                JSONObject item = jsonArray.getJSONObject(i);
+                String organizationName = item.getString("organization_name");
+                String serviceType = item.getString("service_type");
+
+                // Add entry to the list in the "Organization Name - Service Type" format
+                unverifiedDataList.add(organizationName + " - " + serviceType);
+            }
+
+            // Notify the adapter that the data has changed
+            unverifiedDataAdapter.notifyDataSetChanged();
+        } catch (JSONException e) {
+            Toast.makeText(AdminPanel.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    private void updateStatus(String id, String action) {
+        progressBar.setVisibility(View.VISIBLE);
+
+        Map<String, String> formData = new HashMap<>();
+        formData.put("update_status", action);
+        formData.put("id", id);
+
+        new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
+            progressBar.setVisibility(View.GONE);
+
+            if (code == 200) {
+                CustomTools.toast(this, "Status updated successfully!");
+                fetchUnverifiedData(); // Refresh the list
+            } else {
+                CustomTools.toast(this, "Failed to update status.");
+            }
+        }).connect();
     }
 
     private void populateServiceTypeSpinner() {

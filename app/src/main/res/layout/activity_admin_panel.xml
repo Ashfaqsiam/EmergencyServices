@@ -158,6 +158,15 @@
                 android:text="Submit"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
+            <ListView
+                android:id="@+id/listViewUnverified"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:divider="@android:color/darker_gray"
+                android:dividerHeight="1dp" />
+
+
             <!-- Progress bar for loading state -->
             <ProgressBar
                 android:id="@+id/progressBar"
