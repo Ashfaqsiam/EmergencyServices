@@ -6,7 +6,7 @@
     android:paddingHorizontal="8dp"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="?selectableItemBackground"
+    android:background="?selectableItemBackground"
     tools:ignore="all">
 
 

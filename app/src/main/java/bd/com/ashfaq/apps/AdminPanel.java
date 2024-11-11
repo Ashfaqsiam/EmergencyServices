@@ -7,7 +7,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -17,7 +19,6 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -35,15 +36,15 @@ public class AdminPanel extends Activity {
     private EditText editTextOrganizationName, editTextPhoneNumber, editTextPersonName, editTextServiceArea;
     private Button buttonSubmit;
     private ProgressBar progressBar;
-
     private ListView listViewUnverified;
-    private ArrayList<String> unverifiedDataList = new ArrayList<>();
-    private ArrayAdapter<String> unverifiedDataAdapter;
+    Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_admin_panel);
+
+        activity = this;
 
         // Initialize UI components
         spinnerServiceType = findViewById(R.id.spinnerServiceType);
@@ -56,13 +57,12 @@ public class AdminPanel extends Activity {
         editTextServiceArea = findViewById(R.id.editTextServiceArea);
         buttonSubmit = findViewById(R.id.buttonSubmit);
         progressBar = findViewById(R.id.progressBar);
-        listViewUnverified = findViewById(R.id.listViewUnverified);
 
-        // Initialize ArrayAdapter to populate the ListView
-        unverifiedDataAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, unverifiedDataList);
-        listViewUnverified.setAdapter(unverifiedDataAdapter);
 
-        // Fetch unverified data from server
+        listViewUnverified = findViewById(R.id.listViewUnverified); // ListView to show unverified items
+        progressBar = findViewById(R.id.progressBar);
+
+        // Fetch unverified data from the server
         fetchUnverifiedData();
 
         // Populate the spinners with data
@@ -82,7 +82,7 @@ public class AdminPanel extends Activity {
             }
         });
 
-        // Handle passcode logic
+        //
         final Integer[] x = {3};
         ((EditText)findViewById(R.id.et_passcode)).addTextChangedListener(new TextWatcher() {
             @Override
@@ -97,9 +97,10 @@ public class AdminPanel extends Activity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (s.length() == 8){
+                String pass = "123";
+                if (s.length() == pass.length()) {
                     TextView tvResultPass = findViewById(R.id.tvResultPass);
-                    if (String.valueOf(s).equalsIgnoreCase("12411003")){
+                    if (String.valueOf(s).equalsIgnoreCase(pass)) {
                         InputMethodManager inputManager = (InputMethodManager)
                                 getSystemService(Context.INPUT_METHOD_SERVICE);
 
@@ -126,65 +127,49 @@ public class AdminPanel extends Activity {
 
     private void fetchUnverifiedData() {
         progressBar.setVisibility(View.VISIBLE);
+        // Prepare the request data
+        Map<String, String> params = new HashMap<>();
+        params.put("get_unverified", "1"); // Sending the request to get unverified items
 
-        // Prepare data for the server request
-        Map<String, String> formData = new HashMap<>();
-        formData.put("get_unverified", "1");
-
-        // Make request to the server
-        new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
+        // Network request to fetch unverified data
+        new Internet3(this, CustomTools.url("es.php"), params, (code, result) -> {
             progressBar.setVisibility(View.GONE);
 
             if (code == 200) {
-                // Parse the result and display "UNVERIFIED" entries
-                displayUnverifiedData(result);
+                // Parse the result and update the ListView
+                ArrayList<Map<String, String>> unverifiedItems = parseUnverifiedData(String.valueOf(result));
+                UnverifiedAdapter adapter = new UnverifiedAdapter(this, unverifiedItems);
+                listViewUnverified.setAdapter(adapter);
             } else {
-                CustomTools.toast(AdminPanel.this, "Failed to fetch data.");
+                CustomTools.toast(AdminPanel.this, "Failed to fetch unverified data.");
             }
         }).connect();
     }
 
-
-    private void displayUnverifiedData(String result) {
+    private ArrayList<Map<String, String>> parseUnverifiedData(String result) {
+        ArrayList<Map<String, String>> unverifiedItems = new ArrayList<>();
         try {
-            JSONArray jsonArray = new JSONArray(result);
-            unverifiedDataList.clear();  // Clear existing data
+            JSONObject jsonObject = new JSONObject(result);
+            JSONArray jsonArray = jsonObject.getJSONArray("output");
 
-            // Parse and add data to the list
             for (int i = 0; i < jsonArray.length(); i++) {
                 JSONObject item = jsonArray.getJSONObject(i);
-                String organizationName = item.getString("organization_name");
-                String serviceType = item.getString("service_type");
+                Map<String, String> data = new HashMap<>();
+                data.put("id", item.getString("id"));
+                data.put("service_type", item.getString("service_type"));
+                data.put("person_name", item.getString("person_name"));
+                data.put("organization_name", item.getString("organization_name"));
+                data.put("service_city", item.getString("service_city"));
+                data.put("service_area", item.getString("service_area"));
+                data.put("person_specialization", item.getString("person_specialization"));
+                data.put("phone_number", item.getString("phone_number"));
 
-                // Add entry to the list in the "Organization Name - Service Type" format
-                unverifiedDataList.add(organizationName + " - " + serviceType);
+                unverifiedItems.add(data);
             }
-
-            // Notify the adapter that the data has changed
-            unverifiedDataAdapter.notifyDataSetChanged();
         } catch (JSONException e) {
-            Toast.makeText(AdminPanel.this, "Error parsing data", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
-    }
-
-
-    private void updateStatus(String id, String action) {
-        progressBar.setVisibility(View.VISIBLE);
-
-        Map<String, String> formData = new HashMap<>();
-        formData.put("update_status", action);
-        formData.put("id", id);
-
-        new Internet3(this, CustomTools.url("es.php"), formData, (code, result) -> {
-            progressBar.setVisibility(View.GONE);
-
-            if (code == 200) {
-                CustomTools.toast(this, "Status updated successfully!");
-                fetchUnverifiedData(); // Refresh the list
-            } else {
-                CustomTools.toast(this, "Failed to update status.");
-            }
-        }).connect();
+        return unverifiedItems;
     }
 
     private void populateServiceTypeSpinner() {
@@ -309,4 +294,73 @@ public class AdminPanel extends Activity {
             }
         }).connect();
     }
+
+    public class UnverifiedAdapter extends ArrayAdapter<Map<String, String>> {
+        private Context context;
+        private ArrayList<Map<String, String>> items;
+
+        public UnverifiedAdapter(Context context, ArrayList<Map<String, String>> items) {
+            super(context, R.layout.list_item_unverified, items);
+            this.context = context;
+            this.items = items;
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(context).inflate(R.layout.list_item_unverified, parent, false);
+            }
+
+            // Get the current item
+            Map<String, String> item = items.get(position);
+
+            Button btnAccept = convertView.findViewById(R.id.btnAccept);
+            Button btnReject = convertView.findViewById(R.id.btnReject);
+// Get the references to the TextView elements
+            TextView tvPersonName = convertView.findViewById(R.id.tv_person_name);
+            TextView tvOrganizationName = convertView.findViewById(R.id.tv_organization_name);
+            TextView tvServiceCity = convertView.findViewById(R.id.tv_service_city);
+            TextView tvServiceArea = convertView.findViewById(R.id.tv_service_area);
+            TextView tvPersonSpecialization = convertView.findViewById(R.id.tv_person_specialization);
+            TextView tvPhoneNumber = convertView.findViewById(R.id.tv_phone_number);
+
+            log(item);
+
+// Set the data for each TextView
+            tvPersonName.setText(item.get("person_name"));
+            tvOrganizationName.setText(item.get("organization_name"));
+            tvServiceCity.setText(item.get("service_city"));
+            tvServiceArea.setText(item.get("service_area"));
+            tvPersonSpecialization.setText(item.get("person_specialization"));
+            tvPhoneNumber.setText(item.get("phone_number"));
+
+
+            // Set button actions
+            btnAccept.setOnClickListener(v -> updateStatus(item.get("id"), "approve"));
+            btnReject.setOnClickListener(v -> updateStatus(item.get("id"), "reject"));
+
+            return convertView;
+        }
+
+        private void updateStatus(String id, String action) {
+            Map<String, String> params = new HashMap<>();
+            params.put("update_status", action);
+            params.put("id", id);
+
+            // Network request to update the status
+            new Internet3(activity, CustomTools.url("es.php"), params, (code, result) -> {
+                if (code == 200) {
+                    // Update the list by removing the item or refreshing the list
+                    CustomTools.toast(activity, action.equals("approve") ? "Verified" : "Rejected");
+                    fetchUnverifiedData(); // Refresh the data
+                } else {
+                    CustomTools.toast(activity, "Failed to update status.");
+                }
+            }).connect();
+        }
+    }
+
+
+
+
 }

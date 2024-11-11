@@ -161,7 +161,7 @@
             <ListView
                 android:id="@+id/listViewUnverified"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="fill_parent"
                 android:layout_margin="16dp"
                 android:divider="@android:color/darker_gray"
                 android:dividerHeight="1dp" />
