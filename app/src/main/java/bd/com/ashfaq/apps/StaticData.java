@@ -9,7 +9,20 @@ import java.util.Map;
 public class StaticData {
 
     public static String TAG = "errnos";
-    public static String[] bangladeshDistricts = {"All", "Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barishal", "Sylhet", "Rangpur", "Mymensingh", "Comilla", "Chattogram"};
+    public static String[] bangladeshDistricts = {
+            "All", "Barguna", "Barishal", "Bhola", "Jhalokathi", "Patuakhali", "Pirojpur", "Mehindiganj",
+            "Bandarban", "Brahmanbaria", "Chandpur", "Chattogram", "Cumilla", "Cox's Bazar",
+            "Feni", "Khagrachari", "Lakshmipur", "Noakhali", "Rangamati", "Chittagong",
+            "Dhaka", "Faridpur", "Gazipur", "Gopalganj", "Kishoreganj", "Madaripur",
+            "Manikganj", "Munshiganj", "Narayanganj", "Narsingdi", "Rajbari", "Shariatpur",
+            "Tangail", "Bagerhat", "Chuadanga", "Jashore", "Jhenaidah", "Khulna", "Kushtia",
+            "Magura", "Meherpur", "Narail", "Satkhira", "Jamalpur", "Mymensingh", "Netrokona",
+            "Sherpur", "Bogura", "Joypurhat", "Naogaon", "Natore", "Chapainawabganj", "Pabna",
+            "Rajshahi", "Sirajganj", "Dinajpur", "Gaibandha", "Kurigram", "Lalmonirhat",
+            "Nilphamari", "Panchagarh", "Rangpur", "Thakurgaon", "Habiganj", "Moulvibazar",
+            "Sunamganj", "Sylhet"
+    };
+
     public static String[] doctorsSpecialist = {
             "All",
             "Cardiologist",
@@ -91,8 +104,8 @@ public class StaticData {
         serviceList.add(addService("HOSPITAL", "icon_hospital", "Hospital"));
         serviceList.add(addService("FIRE_SERVICE", "icon_fire", "Fire Service"));
         serviceList.add(addService("RAB", "icon_rab", "RAB"));
+        serviceList.add(addService("2", "icon_add_1", "Request Listing"));
         serviceList.add(addService("0", "icon_national_emergency", "Call 999"));
-        serviceList.add(addService("2", "icon_national_emergency", "Request Listing"));
         return serviceList;
     }
 
